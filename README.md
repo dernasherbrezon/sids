@@ -1,4 +1,4 @@
-# sids
+# About [![Build Status](https://travis-ci.org/dernasherbrezon/sids.svg?branch=master)](https://travis-ci.org/dernasherbrezon/sids)
 
 Java implementation for Simple Downlink Share Convention (SiDS) protocol. 
 
