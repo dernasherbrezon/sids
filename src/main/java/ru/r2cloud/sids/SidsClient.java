@@ -20,6 +20,10 @@ public class SidsClient {
 	private final String url;
 	private final int timeout;
 
+	/**
+	 * @param url - list of urls can be found at http://www.pe0sat.vgnet.nl/decoding/tlm-decoding-software/sids/
+	 * @param timeout
+	 */
 	public SidsClient(String url, int timeout) {
 		if (url == null || url.trim().length() == 0) {
 			throw new IllegalArgumentException("url cannot be blank");
