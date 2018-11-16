@@ -21,7 +21,8 @@ public class SidsClient {
 	private final int timeout;
 
 	/**
-	 * @param url - list of urls can be found at http://www.pe0sat.vgnet.nl/decoding/tlm-decoding-software/sids/
+	 * @param url
+	 *            - list of urls can be found at http://www.pe0sat.vgnet.nl/decoding/tlm-decoding-software/sids/
 	 * @param timeout
 	 */
 	public SidsClient(String url, int timeout) {
@@ -33,6 +34,7 @@ public class SidsClient {
 	}
 
 	public void send(Telemetry data) throws IOException, RequestException {
+		validate(data);
 		StringBuilder urlParameters = new StringBuilder();
 		urlParameters.append("noradID=").append(URLEncoder.encode(data.getNoradId(), "UTF-8"));
 		urlParameters.append("&source=").append(URLEncoder.encode(data.getCallsign(), "UTF-8"));
@@ -85,6 +87,21 @@ public class SidsClient {
 			if (conn != null) {
 				conn.disconnect();
 			}
+		}
+	}
+
+	private static void validate(Telemetry telemetry) {
+		if (telemetry.getCallsign() == null || telemetry.getCallsign().trim().length() == 0) {
+			throw new IllegalArgumentException("callsign is empty");
+		}
+		if (telemetry.getFrame() == null || telemetry.getFrame().length == 0) {
+			throw new IllegalArgumentException("frame is empty");
+		}
+		if (telemetry.getNoradId() == null || telemetry.getNoradId().trim().length() == 0) {
+			throw new IllegalArgumentException("noradId is empty");
+		}
+		if (telemetry.getTimestamp() == null) {
+			throw new IllegalArgumentException("timestamp is empty");
 		}
 	}
 
