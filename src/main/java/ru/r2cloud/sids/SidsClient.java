@@ -58,9 +58,11 @@ public class SidsClient {
 		urlParameters.append("&longitude=").append(longitudeValue);
 		urlParameters.append("&latitude=").append(latitudeValue);
 		urlParameters.append("&version=1.0");
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
 		sdf.setTimeZone(GMT);
-		urlParameters.append("&timestamp=").append(URLEncoder.encode(sdf.format(data.getTimestamp()), "UTF-8"));
+		
+		urlParameters.append("&timestamp=").append(URLEncoder.encode(sdf.format(data.getTimestamp()) + "Z", "UTF-8"));
+		
 		urlParameters.append("&frame=").append(bytesToHex(data.getFrame()));
 		byte[] postData = urlParameters.toString().getBytes(StandardCharsets.UTF_8);
 		DataOutputStream wr = null;
@@ -72,7 +74,7 @@ public class SidsClient {
 			conn.setReadTimeout(timeout);
 			conn.setRequestMethod("POST");
 			conn.setDoOutput(true);
-			conn.setRequestProperty("User-Agent", "sids/1.0 info@r2cloud.ru (https://github.com/dernasherbrezon/sids)");
+			conn.setRequestProperty("User-Agent", "sids/1.2 (https://github.com/dernasherbrezon/sids)");
 			conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 			conn.setRequestProperty("Content-Length", Integer.toString(postData.length));
 			conn.setUseCaches(false);
@@ -120,4 +122,5 @@ public class SidsClient {
 		}
 		return new String(hexChars);
 	}
+	
 }
