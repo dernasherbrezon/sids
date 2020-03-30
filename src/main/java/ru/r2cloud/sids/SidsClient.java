@@ -2,20 +2,18 @@ package ru.r2cloud.sids;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
-import java.util.Scanner;
 import java.util.TimeZone;
 
 public class SidsClient {
 
-	private final static TimeZone GMT = TimeZone.getTimeZone("GMT");
-	private final static char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
+	private static final TimeZone GMT = TimeZone.getTimeZone("GMT");
+	private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
 
 	private final String url;
 	private final int timeout;
@@ -33,7 +31,7 @@ public class SidsClient {
 		this.timeout = timeout;
 	}
 
-	public void send(Telemetry data) throws IOException, RequestException {
+	public void send(Telemetry data) throws IOException {
 		validate(data);
 		StringBuilder urlParameters = new StringBuilder();
 		urlParameters.append("noradID=").append(URLEncoder.encode(data.getNoradId(), "UTF-8"));
@@ -65,7 +63,6 @@ public class SidsClient {
 		
 		urlParameters.append("&frame=").append(bytesToHex(data.getFrame()));
 		byte[] postData = urlParameters.toString().getBytes(StandardCharsets.UTF_8);
-		DataOutputStream wr = null;
 		HttpURLConnection conn = null;
 		try {
 			URL obj = new URL(url);
@@ -78,12 +75,12 @@ public class SidsClient {
 			conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 			conn.setRequestProperty("Content-Length", Integer.toString(postData.length));
 			conn.setUseCaches(false);
-			wr = new DataOutputStream(conn.getOutputStream());
+			DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
 			wr.write(postData);
 			wr.close();
 			int responseCode = conn.getResponseCode();
 			if (responseCode < 200 || responseCode >= 300) {
-				throw new RequestException("unable to send telemetry: " + data.getNoradId(), responseCode, convertStreamToString(conn.getInputStream()));
+				throw new IOException("unable to send telemetry: " + data.getNoradId());
 			}
 		} finally {
 			if (conn != null) {
@@ -105,12 +102,6 @@ public class SidsClient {
 		if (telemetry.getTimestamp() == null) {
 			throw new IllegalArgumentException("timestamp is empty");
 		}
-	}
-
-	private static String convertStreamToString(InputStream is) {
-		@SuppressWarnings("resource")
-		Scanner s = new Scanner(is).useDelimiter("\\A");
-		return s.hasNext() ? s.next() : "";
 	}
 
 	private static String bytesToHex(byte[] bytes) {
