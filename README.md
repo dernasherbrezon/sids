@@ -1,4 +1,4 @@
-# About [![Build Status](https://travis-ci.org/dernasherbrezon/sids.svg?branch=master)](https://travis-ci.org/dernasherbrezon/sids) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ru.r2cloud%3Asids&metric=alert_status)](https://sonarcloud.io/dashboard?id=ru.r2cloud%3Asids) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/ru.r2cloud/sids/badge.svg)](https://maven-badges.herokuapp.com/maven-central/ru.r2cloud/sids)
+# About [![Build Status](https://travis-ci.com/dernasherbrezon/sids.svg?branch=master)](https://travis-ci.com/dernasherbrezon/sids) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ru.r2cloud%3Asids&metric=alert_status)](https://sonarcloud.io/dashboard?id=ru.r2cloud%3Asids) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/ru.r2cloud/sids/badge.svg)](https://maven-badges.herokuapp.com/maven-central/ru.r2cloud/sids)
 
 Java implementation for Simple Downlink Share Convention (SiDS) protocol. 
 
