@@ -17,18 +17,30 @@ public class SidsClient {
 
 	private final String url;
 	private final int timeout;
+	private final String token;
 
 	/**
-	 * @param url
-	 *            - list of urls can be found at http://www.pe0sat.vgnet.nl/decoding/tlm-decoding-software/sids/
+	 * @param url     - list of urls can be found at
+	 *                http://www.pe0sat.vgnet.nl/decoding/tlm-decoding-software/sids/
 	 * @param timeout
 	 */
 	public SidsClient(String url, int timeout) {
+		this(url, timeout, null);
+	}
+
+	/**
+	 * @param url     - list of urls can be found at
+	 *                http://www.pe0sat.vgnet.nl/decoding/tlm-decoding-software/sids/
+	 * @param timeout
+	 * @param token   - Token for "Authorization Bearer" scheme. Null for no-authorization
+	 */
+	public SidsClient(String url, int timeout, String token) {
 		if (url == null || url.trim().length() == 0) {
 			throw new IllegalArgumentException("url cannot be blank");
 		}
 		this.url = url;
 		this.timeout = timeout;
+		this.token = token;
 	}
 
 	public void send(Telemetry data) throws IOException {
@@ -58,9 +70,9 @@ public class SidsClient {
 		urlParameters.append("&version=1.0");
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
 		sdf.setTimeZone(GMT);
-		
+
 		urlParameters.append("&timestamp=").append(URLEncoder.encode(sdf.format(data.getTimestamp()) + "Z", "UTF-8"));
-		
+
 		urlParameters.append("&frame=").append(bytesToHex(data.getFrame()));
 		byte[] postData = urlParameters.toString().getBytes(StandardCharsets.UTF_8);
 		HttpURLConnection conn = null;
@@ -71,7 +83,10 @@ public class SidsClient {
 			conn.setReadTimeout(timeout);
 			conn.setRequestMethod("POST");
 			conn.setDoOutput(true);
-			conn.setRequestProperty("User-Agent", "sids/1.2 (https://github.com/dernasherbrezon/sids)");
+			if (token != null) {
+				conn.setRequestProperty("Authorization", "Bearer " + token);
+			}
+			conn.setRequestProperty("User-Agent", "sids/1.3 (https://github.com/dernasherbrezon/sids)");
 			conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 			conn.setRequestProperty("Content-Length", Integer.toString(postData.length));
 			conn.setUseCaches(false);
@@ -113,5 +128,5 @@ public class SidsClient {
 		}
 		return new String(hexChars);
 	}
-	
+
 }
