@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ru.r2cloud</groupId>
 	<artifactId>sids</artifactId>
-	<version>1.3</version>
+	<version>1.4-SNAPSHOT</version>
 	<url>https://github.com/dernasherbrezon/sids</url>
 	<name>sids</name>
 	<description>Java implementation for Simple Downlink Share Convention (SiDS) protocol</description>
@@ -161,7 +161,7 @@
 	<scm>
 		<url>https://github.com/dernasherbrezon/sids</url>
 		<connection>scm:git:git@github.com/dernasherbrezon/sids.git</connection>
-		<developerConnection>scm:git:git@github.com/dernasherbrezon/sids.git</developerConnection>
+		<developerConnection>scm:git:git@github.com:dernasherbrezon/sids.git</developerConnection>
 		<tag>sids-1.3</tag>
 	</scm>
 
