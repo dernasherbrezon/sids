@@ -95,7 +95,7 @@ public class SidsClient {
 			wr.close();
 			int responseCode = conn.getResponseCode();
 			if (responseCode < 200 || responseCode >= 300) {
-				throw new IOException("unable to send telemetry: " + data.getNoradId());
+				throw new IOException("unable to send telemetry: " + data.getNoradId() + " code: " + responseCode);
 			}
 		} finally {
 			if (conn != null) {
